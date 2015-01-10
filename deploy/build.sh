@@ -1,8 +1,9 @@
-#!/bin/bash
+#!/bin/sh -xe
 
-set -e
-set -x
-
+v=2
 godep go build -a github.com/google/cadvisor
-
-docker build -t google/cadvisor:canary .
+strip cadvisor
+docker build -t google/cadvisor:$v .
+t=docker-registry.r53.acp.io:5000/google/cadvisor:$v
+docker tag -f google/cadvisor:$v $t
+docker push $t
